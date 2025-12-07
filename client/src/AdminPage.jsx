@@ -199,7 +199,6 @@ const AdminPage = () => {
             </div>
           )}
 
-          <div className="hidden sm:block overflow-x-auto bg-white rounded-2xl shadow-xl">
             <table className="min-w-full divide-y divide-[#DECCB7]">
               <thead className="bg-[#F4EFE7] text-sm">
                 <tr>
