@@ -23,14 +23,11 @@ const AdminPage = () => {
   const [showImage, setShowImage] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
 
-
-
   const API_ORDERS =
     "https://3ac66a31-8db6-4d64-9727-4203c6f07c66-00-3f5slvm9dy918.pike.replit.dev/api/admin/orders";
   const API_PRODUCTS =
     "https://3ac66a31-8db6-4d64-9727-4203c6f07c66-00-3f5slvm9dy918.pike.replit.dev/api/admin/products";
 
-  // === FORM TAMBAH PRODUK
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
@@ -40,9 +37,6 @@ const AdminPage = () => {
 
   const [imagePreview, setImagePreview] = useState(null);
 
-  // ============================
-  // FETCH ORDER
-  // ============================
   const fetchOrders = async () => {
     setIsLoading(true);
     setError(null);
@@ -61,9 +55,6 @@ const AdminPage = () => {
     fetchOrders();
   }, []);
 
-  // ============================
-  // FETCH PRODUCT
-  // ============================
   const fetchProducts = async () => {
     try {
       const res = await fetch(API_PRODUCTS);
@@ -78,9 +69,6 @@ const AdminPage = () => {
     if (activeTab === "products") fetchProducts();
   }, [activeTab]);
 
-  // ============================
-  // PREVIEW GAMBAR
-  // ============================
   const handleSelectImage = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -88,9 +76,6 @@ const AdminPage = () => {
     setImagePreview(URL.createObjectURL(file));
   };
 
-  // ============================
-  // TAMBAH PRODUK
-  // ============================
   const handleAddProduct = async (e) => {
     e.preventDefault();
 
@@ -103,7 +88,7 @@ const AdminPage = () => {
     try {
       const res = await fetch(API_PRODUCTS, {
         method: "POST",
-        body: formData, // TANPA HEADERS
+        body: formData,
       });
 
       const data = await res.json();
@@ -119,9 +104,6 @@ const AdminPage = () => {
     }
   };
 
-  // ============================
-  // HAPUS PRODUK
-  // ============================
   const handleDeleteProduct = async (id) => {
     if (!confirm("Yakin ingin menghapus produk ini?")) return;
 
@@ -141,7 +123,6 @@ const AdminPage = () => {
 
   return (
     <div className="min-h-screen pt-24 pb-20 px-4 sm:px-6 container mx-auto">
-      {/* HEADER */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
         <h1 className="text-3xl sm:text-4xl font-bold text-[#5E4A3A] font-serif flex items-center gap-3">
           <Package size={32} /> Panel Admin
@@ -158,7 +139,6 @@ const AdminPage = () => {
         </button>
       </div>
 
-      {/* TAB */}
       <div className="flex gap-4 mb-8">
         <button
           onClick={() => setActiveTab("orders")}
@@ -199,7 +179,9 @@ const AdminPage = () => {
             </div>
           )}
 
-            <table className="min-w-full divide-y divide-[#DECCB7]">
+          {/* FIX: hilangkan hidden sm:block */}
+          <div className="block overflow-x-auto bg-white rounded-2xl shadow-xl">
+            <table className="min-w-full divide-y divide-[#DECCB7] text-xs sm:text-sm">
               <thead className="bg-[#F4EFE7] text-sm">
                 <tr>
                   <th className="px-6 py-3 text-left font-bold">ID</th>
@@ -253,7 +235,6 @@ const AdminPage = () => {
             <Boxes size={26} /> Kelola Produk
           </h2>
 
-          {/* Form Tambah Produk */}
           <form
             onSubmit={handleAddProduct}
             className="bg-white p-5 rounded-2xl shadow-md mb-8"
@@ -295,7 +276,6 @@ const AdminPage = () => {
                 className="border p-2 rounded"
               />
 
-              {/* Upload Image */}
               <label className="border p-2 rounded flex items-center gap-2 cursor-pointer">
                 <ImageIcon size={18} />
                 <span>Pilih Gambar</span>
@@ -308,7 +288,6 @@ const AdminPage = () => {
               </label>
             </div>
 
-            {/* Preview */}
             {imagePreview && (
               <div className="mt-4">
                 <p className="font-semibold mb-2">Preview Gambar:</p>
@@ -324,7 +303,6 @@ const AdminPage = () => {
             </button>
           </form>
 
-          {/* Daftar Produk */}
           <div className="bg-white rounded-2xl shadow-md p-4">
             <table className="min-w-full text-left">
               <thead>
@@ -367,7 +345,6 @@ const AdminPage = () => {
         </>
       )}
 
-      {/* Modal Gambar */}
       {showImage && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl p-4 max-w-full sm:max-w-[500px] relative">
