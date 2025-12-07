@@ -6,7 +6,11 @@ import {
   ChevronLeft,
   Plus,
   CheckCircle,
+  Star, // TAMBAHAN: Icon bintang
 } from "lucide-react";
+
+// TAMBAHAN: Import komponen review yang sudah dibuat sebelumnya
+import ProductReviews from "./ProductReviews"; 
 
 const MenuSection = ({ onAddToCart }) => {
   const scrollContainerRef = useRef(null);
@@ -17,9 +21,12 @@ const MenuSection = ({ onAddToCart }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // STATE BARU: Untuk popup review
+  const [selectedProductForReview, setSelectedProductForReview] = useState(null);
+
   // AMBIL DATA DARI BACKEND
   useEffect(() => {
-    fetch("http://localhost:3000/api/admin/products")
+    fetch("https://3ac66a31-8db6-4d64-9727-4203c6f07c66-00-3f5slvm9dy918.pike.replit.dev/api/admin/products")
       .then((res) => res.json())
       .then((data) => {
         if (data.products) {
@@ -97,7 +104,7 @@ const MenuSection = ({ onAddToCart }) => {
                 <img
                   src={
                     product.image
-                      ? `http://localhost:3000${product.image}`
+                      ? `https://3ac66a31-8db6-4d64-9727-4203c6f07c66-00-3f5slvm9dy918.pike.replit.dev${product.image}`
                       : "/no-image.png"
                   }
                   alt={product.name}
@@ -120,13 +127,27 @@ const MenuSection = ({ onAddToCart }) => {
                   {product.desc}
                 </p>
 
-                <button
-                  onClick={() => handleOpenModal(product)}
-                  className="w-full py-3 bg-white border border-[#5E4A3A] text-[#5E4A3A] rounded-xl font-semibold hover:bg-[#5E4A3A] hover:text-[#F4EFE7] transition-all flex items-center justify-center gap-2 group-hover:scale-[1.02]"
-                >
-                  <Plus size={18} />
-                  Tambah ke Keranjang
-                </button>
+                {/* EDIT DI SINI: Tombol dipisah jadi dua (Ulasan & Beli) */}
+                <div className="flex gap-2 mt-auto">
+                  {/* Tombol Lihat Review */}
+                  <button
+                    onClick={() => setSelectedProductForReview(product)}
+                    className="px-3 py-3 bg-white border border-[#5E4A3A] text-[#5E4A3A] rounded-xl hover:bg-[#F4EFE7] transition-all flex items-center justify-center"
+                    title="Lihat Ulasan"
+                  >
+                    <Star size={18} />
+                  </button>
+
+                  {/* Tombol Add to Cart */}
+                  <button
+                    onClick={() => handleOpenModal(product)}
+                    className="flex-1 py-3 bg-[#5E4A3A] text-[#F4EFE7] rounded-xl font-semibold hover:bg-[#4a3b2e] transition-all flex items-center justify-center gap-2"
+                  >
+                    <Plus size={18} />
+                    Beli
+                  </button>
+                </div>
+                
               </div>
             </div>
           ))}
@@ -149,7 +170,7 @@ const MenuSection = ({ onAddToCart }) => {
         </button>
       </div>
 
-      {/* MODAL KONFIRMASI */}
+      {/* MODAL KONFIRMASI (ADD TO CART) */}
       {showModal && selectedProduct && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center px-4">
           <div
@@ -203,6 +224,39 @@ const MenuSection = ({ onAddToCart }) => {
           </div>
         </div>
       )}
+
+      {/* TAMBAHAN BARU: MODAL KHUSUS REVIEW */}
+      {selectedProductForReview && (
+        <div className="fixed inset-0 z-[70] flex items-center justify-center px-4 backdrop-blur-sm bg-black/50">
+          <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-fade-in-up relative">
+            
+            {/* Header Modal Review */}
+            <div className="flex justify-between items-center p-6 border-b bg-[#F4EFE7]">
+              <div>
+                <h3 className="text-xl font-bold text-[#5E4A3A] font-serif">
+                  Ulasan Produk
+                </h3>
+                <p className="text-sm text-[#5E4A3A]/70">
+                  {selectedProductForReview.name}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedProductForReview(null)}
+                className="p-2 bg-white rounded-full hover:bg-red-50 hover:text-red-500 transition shadow-sm"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Isi Modal: Panggil ProductReviews Component */}
+            <div className="overflow-y-auto p-0 bg-white">
+              <ProductReviews productId={selectedProductForReview._id} />
+            </div>
+            
+          </div>
+        </div>
+      )}
+
     </section>
   );
 };

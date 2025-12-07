@@ -23,9 +23,12 @@ const AdminPage = () => {
   const [showImage, setShowImage] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
 
-  // === ENDPOINT
-  const API_ORDERS = "http://localhost:3000/api/admin/orders";
-  const API_PRODUCTS = "http://localhost:3000/api/admin/products";
+
+
+  const API_ORDERS =
+    "https://3ac66a31-8db6-4d64-9727-4203c6f07c66-00-3f5slvm9dy918.pike.replit.dev/api/admin/orders";
+  const API_PRODUCTS =
+    "https://3ac66a31-8db6-4d64-9727-4203c6f07c66-00-3f5slvm9dy918.pike.replit.dev/api/admin/products";
 
   // === FORM TAMBAH PRODUK
   const [newProduct, setNewProduct] = useState({

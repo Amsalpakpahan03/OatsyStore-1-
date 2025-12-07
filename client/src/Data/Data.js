@@ -46,8 +46,8 @@ export const PRODUCTS_DATA = [
 ];
 
 export const STORE_DATA = {
-  adminPhone: "6281578358507",
-  storeName: "JOKOWI",
+  adminPhone: "6281210142621",
+  storeName: "Oatsy Store",
   qrCodeImage:
     "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=BayarKeKueManis",
   merchantName: "KueManis Official",
